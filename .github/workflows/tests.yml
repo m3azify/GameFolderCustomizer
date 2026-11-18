@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  pester:
+    name: Pester 5 on Windows PowerShell 5.1
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Pester 5
+        shell: powershell
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module -Name Pester -MinimumVersion 5.7.0 -Scope CurrentUser -Force -SkipPublisherCheck
+
+      - name: Run Pester tests
+        shell: powershell
+        run: |
+          Import-Module Pester -MinimumVersion 5.7.0 -Force
+          $result = Invoke-Pester -Path .\Tests\GameFolderCustomizer.Tests.ps1 -PassThru
+          if ($result.FailedCount -gt 0) { exit 1 }
+
+      - name: Validate module manifest
+        shell: powershell
+        run: |
+          $manifest = Test-ModuleManifest -Path .\GameFolderCustomizer.psd1 -ErrorAction Stop
+          Write-Host "Module $($manifest.Name) v$($manifest.Version) validated"

@@ -1,0 +1,29 @@
+# Pester / test artifacts
+Tests/_*/
+Tests/*.log
+launch-debug.log
+*.log
+
+# Local debug / scratch files
+*.bak
+*.tmp
+*.old
+*.orig
+
+# PowerShell module analysis cache
+*.psd1-*
+PSCachedHelp.xml
+
+# OS files
+Thumbs.db
+Desktop.ini
+desktop.ini
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# Backup folder (created by the agent, removed when done)
+.backups/
